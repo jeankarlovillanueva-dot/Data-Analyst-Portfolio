@@ -1,0 +1,66 @@
+Create Table historical_data_template (
+Date date not null, Open numeric, 
+High numeric, 
+Low numeric, 
+Close numeric,
+Volume numeric,
+Dividends numeric,
+"Stock Splits" numeric,
+"Capital Gains" numeric,
+asset_code varchar not null, PRIMARY KEY (asset_code, date)
+);
+ select * from historical_data_template;
+
+CREATE TABLE CRRRX (Like historical_data_template including all);
+CREATE TABLE DOXIX (Like historical_data_template including all);
+CREATE TABLE FSMLX (Like historical_data_template including all);
+CREATE TABLE GSFTX (Like historical_data_template including all);
+CREATE TABLE JDMNX(Like historical_data_template including all);
+CREATE TABLE JUEMX (Like historical_data_template including all);
+CREATE TABLE KCXIX (Like historical_data_template including all);
+CREATE TABLE RNWGX (Like historical_data_template including all);
+CREATE TABLE VAIPX (Like historical_data_template including all);
+CREATE TABLE VBTLX (Like historical_data_template including all);
+CREATE TABLE VINIX (Like historical_data_template including all);
+CREATE TABLE VTMNX (Like historical_data_template including all);
+CREATE TABLE VIEIX (Like historical_data_template including all);
+CREATE TABLE WFPAX (Like historical_data_template including all);
+
+ALTER TABLE historical_data_template rename to Historical_Data_Template;
+
+
+CREATE TABLE portfolio_aligned AS
+SELECT 
+    RNWGX.date,
+    RNWGX.close AS RNWGX_close,
+    VTMNX.close AS VTMNX_close,
+    KCXIX.close AS KCXIX_close,
+    VINIX.close AS VINIX_close,
+    JUEMX.close AS JUEMX_close,
+    CRRRX.close AS CRRRX_close,
+    GSFTX.close AS GSFTX_close,
+    VIEIX.close AS VIEIX_close,
+    JDMNX.close AS JDMNX_close,
+    VAIPX.close AS VAIPX_close,
+    FSMLX.close AS FSMLX_close,
+    VBTLX.close AS VBTLX_close,
+    WFPAX.close AS WFPAX_close,
+	DOXIX.close AS DOXIX_close
+FROM RNWGX
+INNER JOIN VTMNX ON RNWGX.date = VTMNX.date
+INNER JOIN KCXIX ON RNWGX.date = KCXIX.date
+INNER JOIN VINIX ON RNWGX.date = VINIX.date
+INNER JOIN JUEMX ON RNWGX.date = JUEMX.date
+INNER JOIN CRRRX ON RNWGX.date = CRRRX.date
+INNER JOIN GSFTX ON RNWGX.date = GSFTX.date
+INNER JOIN VIEIX ON RNWGX.date = VIEIX.date
+INNER JOIN WFPAX ON RNWGX.date = WFPAX.date
+INNER JOIN JDMNX ON RNWGX.date = JDMNX.date
+INNER JOIN VAIPX ON RNWGX.date = VAIPX.date
+INNER JOIN FSMLX ON RNWGX.date = FSMLX.date
+INNER JOIN VBTLX ON RNWGX.date = VBTLX.date
+INNER JOIN DOXIX ON RNWGX.date = DOXIX.date
+ORDER BY RNWGX.date;
+
+ALTER DATABASE "Portfolio Analysis Database" RENAME TO portfolio_analysis_db;
+
